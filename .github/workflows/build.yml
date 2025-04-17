@@ -39,18 +39,19 @@ jobs:
       - name: Debug - find pom.xml
         run: find . -name "pom.xml"
 
+      - name: Move .git into project directory
+        run: |
+          if [ -d mathpix2 ]; then
+            mv .git mathpix2/.git
+          fi
+
       - name: Build and analyze with Sonar
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: "https://39e4-2402-e280-3e6d-145-edd1-b6c7-c584-b54a.ngrok-free.app"
         run: |
-          # Check where the pom.xml is located
-          ls -R | grep pom.xml
-          
-          # Change directory if necessary (ensure your pom.xml is inside mathpix2)
-          cd mathpix2 || exit 1  # Will fail if mathpix2 directory doesn't exist
+          cd mathpix2 || exit 1
 
-          # Run Maven build and Sonar analysis
           mvn -X -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
             -Dsonar.projectKey=Mayuri-Organization_MayuriRepo_218c1059-65d6-4ee1-95fa-1b98e862d0f1 \
             -Dsonar.projectName='MayuriRepo'

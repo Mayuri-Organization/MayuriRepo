@@ -42,7 +42,7 @@ jobs:
       - name: Build and analyze with Sonar
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_HOST_URL: "https://39e4-2402-e280-3e6d-145-edd1-b6c7-c584-b54a.ngrok-free.app"
         run: |
           # Check where the pom.xml is located
           ls -R | grep pom.xml

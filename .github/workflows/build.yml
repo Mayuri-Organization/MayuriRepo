@@ -45,6 +45,6 @@ jobs:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: |
           cd mathpix2
-          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+          mvn -X -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
             -Dsonar.projectKey=Mayuri-Organization_MayuriRepo_218c1059-65d6-4ee1-95fa-1b98e862d0f1 \
             -Dsonar.projectName='MayuriRepo'

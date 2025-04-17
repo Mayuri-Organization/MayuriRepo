@@ -36,21 +36,15 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Debug - check directory and pom.xml
-        run: |
-          echo "Current directory:"
-          pwd
-          echo "List files:"
-          ls -al
-          echo "Recursive list:"
-          ls -R
+      - name: Debug - find pom.xml
+        run: find . -name "pom.xml"
 
       - name: Build and analyze with Sonar
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: |
-          cd your-subdirectory  # 🔁 Replace this with the folder containing pom.xml
+          cd mathpix2
           mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
             -Dsonar.projectKey=Mayuri-Organization_MayuriRepo_218c1059-65d6-4ee1-95fa-1b98e862d0f1 \
             -Dsonar.projectName='MayuriRepo'

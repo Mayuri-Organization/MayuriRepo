@@ -5,35 +5,52 @@ on:
     branches:
       - main
 
-
 jobs:
   build:
     name: Build and analyze
     runs-on: ubuntu-latest
-    
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0  # Required for proper Sonar analysis
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: 17
-          distribution: 'zulu' # Alternative distribution options are available.
+          distribution: 'zulu'
+
       - name: Cache SonarQube packages
         uses: actions/cache@v4
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
+
       - name: Cache Maven packages
         uses: actions/cache@v4
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      - name: Build and analyze
+
+      - name: Debug - find pom.xml
+        run: find . -name "pom.xml"
+
+      - name: Build and analyze with Sonar
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=newproject -Dsonar.projectName='newproject'
+        run: |
+          # Check where the pom.xml is located
+          ls -R | grep pom.xml
+          
+          # Change directory if necessary (ensure your pom.xml is inside mathpix2)
+          cd mathpix2 || exit 1  # Will fail if mathpix2 directory doesn't exist
+
+          # Run Maven build and Sonar analysis
+          mvn -X -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+            -Dsonar.projectKey=Mayuri-Organization_MayuriRepo_218c1059-65d6-4ee1-95fa-1b98e862d0f1 \
+            -Dsonar.projectName='MayuriRepo'

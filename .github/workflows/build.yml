@@ -5,53 +5,35 @@ on:
     branches:
       - main
 
+
 jobs:
   build:
     name: Build and analyze
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Required for proper Sonar analysis
-
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: 17
-          distribution: 'zulu'
-
+          distribution: 'zulu' # Alternative distribution options are available.
       - name: Cache SonarQube packages
         uses: actions/cache@v4
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
-
       - name: Cache Maven packages
         uses: actions/cache@v4
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-
-      - name: Debug - find pom.xml
-        run: find . -name "pom.xml"
-
-      - name: Move .git into project directory
-        run: |
-          if [ -d mathpix2 ]; then
-            mv .git mathpix2/.git
-          fi
-
-      - name: Build and analyze with Sonar
+      - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: "https://39e4-2402-e280-3e6d-145-edd1-b6c7-c584-b54a.ngrok-free.app"
-        run: |
-          cd mathpix2 || exit 1
-
-          mvn -X -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-            -Dsonar.projectKey=Mayuri-Organization_MayuriRepo_218c1059-65d6-4ee1-95fa-1b98e862d0f1 \
-            -Dsonar.projectName='MayuriRepo'
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=newproject -Dsonar.projectName='newproject'

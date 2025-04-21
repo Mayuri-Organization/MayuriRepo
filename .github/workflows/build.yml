@@ -14,7 +14,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Ensure full history for relevant analysis
+          fetch-depth: 0  # Needed for proper SonarQube analysis
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -51,7 +51,7 @@ jobs:
           cd "$POM_DIR"
           echo "Running SonarQube analysis in directory: $(pwd)"
           mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-            -Dsonar.projectKey=${{ github.repository }} \
-            -Dsonar.projectName='${{ github.repository }}' \
+            -Dsonar.projectKey=Mayuri_Organization_MayuriRepo \
+            -Dsonar.projectName='MayuriRepo' \
             -Dsonar.host.url=$SONAR_HOST_URL \
             -Dsonar.login=$SONAR_TOKEN

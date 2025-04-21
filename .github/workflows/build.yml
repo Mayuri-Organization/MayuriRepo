@@ -55,7 +55,7 @@ jobs:
           echo "Switching to project directory: $POM_DIR"
           cd "$POM_DIR"
           mvn -B clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-            -Dsonar.projectKey=Mayuri_Organization_MayuriRepo \
+            -Dsonar.projectKey=Mayuri-Organization_MayuriRepo_032b6803-f9c2-4e6b-b94f-ee3a25f56e08 \
             -Dsonar.projectName="MayuriRepo" \
             -Dsonar.host.url="${SONAR_HOST_URL}" \
             -Dsonar.login="${SONAR_TOKEN}"
